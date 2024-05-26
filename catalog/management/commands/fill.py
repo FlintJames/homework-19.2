@@ -35,7 +35,6 @@ class Command(BaseCommand):
                 Category.objects.create(**category_item)
             )
 
-
         for product in Command.json_read_products():
             product_list.append(
                 {"id": product['pk'], "name": product['fields']['name'],
@@ -52,7 +51,6 @@ class Command(BaseCommand):
             product_for_create.append(
                 Product.objects.create(**product_item)
             )
-
 
         Category.objects.bulk_create(category_for_create)
         Product.objects.bulk_create(product_for_create)
