@@ -1,5 +1,5 @@
 from django.db import models
-
+from django.utils import connection
 
 NULLABLE = {"blank": True, "null": True}
 
@@ -7,6 +7,11 @@ NULLABLE = {"blank": True, "null": True}
 class Category(models.Model):
     name = models.CharField(max_length=100, verbose_name="Наименование категории")
     description = models.TextField(**NULLABLE, verbose_name="Описание категории")
+
+    @classmethod
+    def truncate_table_restart_id(cls):
+        with connection.cursor() as cursor:
+            cursor.execute(f'TRUNCATE TABLE {cls._meta.db_table} RESTART IDENTITY CASCADE')
 
     def __str__(self):
         return f"{self.name}"
