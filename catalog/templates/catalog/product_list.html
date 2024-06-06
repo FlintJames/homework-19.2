@@ -12,10 +12,17 @@
                     <img src="{{ product.photo | media_filter }}">
                     <div class="card-body">
                         <p class="card-text">{{ product.name }}</p>
+                        {% for version_item in product.version_set.all %}
+                        <ul class="list-unstyled mt-3 mb-4 text-start m-3">
+                            <li>{{ version_item.version_num }}</li>
+                        </ul>
+                        {% endfor %}
                         <div class="d-flex justify-content-between align-items-center">
                             <div class="btn-group">
                                 <a class="btn btn-primary" href="{% url 'catalog:products_detail' product.pk %}"
                                    role="button">Просмотр</a>
+                                <a class="btn btn-primary" href="{% url 'catalog:product_update' product.pk %}"
+                                   role="button">Редактировать</a>
                             </div>
                             <small class="text-body-secondary">9 mins</small>
                         </div>
