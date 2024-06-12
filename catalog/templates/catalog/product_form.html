@@ -1,36 +1,69 @@
 {% extends 'catalog/base.html' %}
 {% block content %}
-<div class="conteiner">
-    <form class="row" method="post" enctype="multipart/form-data">
-        <div class="col-6">
-            <div class="card">
-                {% if object %}
-                <p class="card-text">Редактирование продукта</p>
-                {% else %}
-                <p class="card-text">Создание продукта</p>
-                {% endif %}
-                <div class="card-body">
-                    {% csrf_token %}
-                    {{ form.as_p }}
+<div class="pricing-header px-3 py-3 pt-md-5 pb-md-4 mx-auto text-center">
+    <h1 class="display-4">
+        {% if not object %}
+        Создать продукт
+        {% else %}
+        Редактировать продукт
+        {% endif %}
+    </h1>
+</div>
+
+<div class="container">
+    <form method="post" action="" class="form-floating" enctype="multipart/form-data">
+        <div class="row">
+            <div class="col-6">
+                <div class="card">
+                    <div class="card-body">
+                        <p class="text-header">
+                            {% if not object %}
+                            Создать продукт
+                            {% else %}
+                            Редактировать продукт
+                            {% endif %}
+                        </p>
+                        {% csrf_token %}
+                        {{ form.as_p }}
+                        <button type="submit" class="btn btn-primary">Сохранить</button>
+                    </div>
                 </div>
-                <button type="submit" class="btn btn-primary">
-                    {% if object %}
-                    Сохранить
-                    {% else %}
-                    Создать
-                    {% endif %}
-                </button>
+            </div>
+            <div class="col-6 mx-auto">
+                <div class="card">
+                    <div class="card-body">
+                        <p class="text-header">
+                            {% if not object %}
+                            Добавить версию продукта
+                            {% else %}
+                            Редактировать версию продукта
+                            {% endif %}
+                        </p>
+                        {{ formset.management_form }}
+                        {% for form in formset.forms %}
+                        {% if form.errors %}
+                        <div class="alert alert-danger" role="alert">
+                            <ul>
+                                {% for field in form %}
+                                {% for error in field.errors %}
+                                <li>{{ error }}</li>
+                                {% endfor %}
+                                {% endfor %}
+                                {% for error in form.non_field_errors %}
+                                <li>{{ error }}</li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                        {% endif %}
+                        {{ form.as_p }}
+                        {% if not forloop.last %}
+                        <hr>
+                        {% endif %}
+                        {% endfor %}
+                    </div>
+                </div>
             </div>
         </div>
-        <div class="col-6">
-            <div class="card">
-                <p class="card-text">Версия продукта</p>
-                <div class="card-body">
-                    {{ formset.management_form }}
-                    {% for from in formset.forms %}
-                    {{ form.as_p }}
-                    {% endfor %}
-                </div>
     </form>
 </div>
 {% endblock %}
