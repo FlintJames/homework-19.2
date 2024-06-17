@@ -192,8 +192,10 @@
                 <p>
                     <a class="btn btn-primary" href="{% url 'catalog:blog_create' %}"
                        role="button">Создать блог</a>
+                    {% if user.is_authenticated %}
                     <a class="btn btn-primary" href="{% url 'catalog:product_create' %}"
                        role="button">Создать продукт</a>
+                    {% endif %}
                 </p>
             </div>
         </div>
