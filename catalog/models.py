@@ -32,7 +32,7 @@ class Product(models.Model):
     category = models.ForeignKey(
         Category, on_delete=models.CASCADE, verbose_name="Категория"
     )
-    purchase_price = models.IntegerField(max_length=150, verbose_name="Цена за покупку")
+    purchase_price = models.IntegerField(verbose_name="Цена за покупку")
     created_at = models.DateTimeField(auto_now_add=True, verbose_name="Дата создания")
     updated_at = models.DateTimeField(
         auto_now=True, verbose_name="Дата последнего изменения"
@@ -40,12 +40,19 @@ class Product(models.Model):
 
     maker = models.ForeignKey(User, **NULLABLE, verbose_name="Производитель", on_delete=models.SET_NULL)
 
+    is_published = models.BooleanField(default=False, verbose_name='опубликовано')
+
     def __str__(self):
         return f"{self.name}"
 
     class Meta:
         verbose_name = "Продукт"
         verbose_name_plural = "Продукты"
+        permissions = [
+            ("can_edit_category", "Can edit category"),
+            ("can_edit_description", "Can edit description"),
+            ("can_off_published", "Can off published")
+        ]
 
 
 class Blog(models.Model):
