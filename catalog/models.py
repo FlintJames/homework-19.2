@@ -14,10 +14,10 @@ class Category(models.Model):
         verbose_name = "Категория"
         verbose_name_plural = "Категории"
 
-    @classmethod
-    def truncate_table_restart_id(cls):
-        with connection.cursor() as cursor:
-            cursor.execute(f'TRUNCATE TABLE "{cls._meta.db_table}" RESTART IDENTITY CASCADE;')
+    #@classmethod
+    #def truncate_table_restart_id(cls):
+        #with connection.cursor() as cursor:
+            #cursor.execute(f'TRUNCATE TABLE "{cls._meta.db_table}" RESTART IDENTITY CASCADE;')
 
     def __str__(self):
         return f"{self.name}"

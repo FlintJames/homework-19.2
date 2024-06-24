@@ -7,7 +7,8 @@ from django.views.generic import ListView, DetailView, CreateView, UpdateView, D
 from pytils.translit import slugify
 
 from catalog.forms import ProductForm, VersionForm, ProductModeratorForm
-from catalog.models import Product, Blog, Version
+from catalog.models import Product, Blog, Version, Category
+from catalog.services import get_catalog_from_cache
 
 
 def home(request):
@@ -109,7 +110,8 @@ class ProductUpdateView(LoginRequiredMixin, UpdateView):
         user = self.request.user
         if user == self.object.maker:
             return ProductForm
-        if user.has_perm('catalog.can_edit_category') and user.has_perm('catalog.can_edit_description') and user.has_perm('catalog.can_off_published'):
+        if user.has_perm('catalog.can_edit_category') and user.has_perm(
+                'catalog.can_edit_description') and user.has_perm('catalog.can_off_published'):
             return ProductModeratorForm
         raise PermissionDenied
 
@@ -166,3 +168,26 @@ def toggle_publication(request, pk):
     blog_item.save()
 
     return redirect(reverse('catalog:blog_list'))
+
+
+class CategoryListView(LoginRequiredMixin, ListView):
+    model = Category
+
+    def get_queryset(self):
+        return get_catalog_from_cache()
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = 'Категории продуктов'
+        return context
+
+
+class CategoryDetailView(LoginRequiredMixin, DetailView):
+    model = Category
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        category_item = self.get_object()
+        context['category_item'] = category_item
+        context['title'] = f'Категория #{category_item.pk}'
+        return context
