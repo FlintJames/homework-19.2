@@ -69,7 +69,7 @@ class ProductCreateView(CreateView, LoginRequiredMixin):
             context_data["formset"] = ProductFormset
         return context_data
 
-    def form_valid(self, form):
+    def form_valid1(self, form):
         context_data = self.get_context_data()
         formset = context_data["formset"]
         if form.is_valid() and formset.is_valid():
